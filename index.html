@@ -18,7 +18,6 @@
     .widget p {
       font-style: italic;
     }
-
   </style>
 </head>
 
@@ -59,7 +58,45 @@
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
 
+      constructor(...ints) {
+        this.ints = ints
+      }
+      getAll() {
+        return this.ints
+        // console.log(Integers(this.getAll()))
+      }
+      getEvens(nums) {
+        return this.ints.filter(nums => nums % 2 === 0)
+      }
+      getNegatives() {
+        let negativeInts = this.ints.filter(int => int < 0)
+        return negativeInts
+      }
+      getAllSquared() {
+        let squaredNum = this.ints.map(int => int ** 2)
+        return squaredNum
+      }
+      pop() {
+        return this.ints.pop()
+      }
+      push(number) {
+        this.ints.push(number)
+        return this.ints
+      }
+      getEveryNth(int) {
+        let result = []
+        for (let i = 0; i < this.ints.length; i += int) {
+          result.push(this.ints[i])
+        }
+        return result
+      }
+      getAllReversed() {
+        return this.ints.reverse()
+      }
     }
+
+
+
 
     // 👉 CHALLENGE 2 NerfGun
     class NerfGun {
@@ -76,8 +113,44 @@
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
+      constructor(givenProjectiles) {
+        this.projectiles = givenProjectiles     // indicates total capacity of nerfgun instance
+        this.ammo = givenProjectiles   // loaded projectiles
+        this.safetyOn = true
+        // this.ammo = 0       
+      }
 
+      shoot() {
+        if (this.ammo > 0 && !this.safetyOn) {
+          this.ammo--
+          return "Bang!"
+        } else {
+          return "Click!"
+        }
+      }
+
+      reload(num) {
+
+        if (typeof num !== 'number' || num <= 0) {
+          return "Error reloading!"
+        }
+
+        this.ammo += num
+        if (this.ammo >= this.projectiles) {
+          this.ammo = this.projectiles
+        }
+
+        return `${this.ammo} projectiles left!`
+      }
+
+      toggleSafety() {
+        this.safetyOn = !this.safetyOn
+        return this.safetyOn ? "Safety enabled!" : "Safety disabled!"
+      }
     }
+
+
+
 
     // 👉 CHALLENGE 3 EBook
     class EBook {
@@ -95,8 +168,29 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
+      constructor(book, characters) {
+        this.book = book
+        this.characters = characters
+        this.page = 0
+      }
+      next() {
+        let beginning = this.page * this.characters
+        let endding = (this.page + 1) * this.characters
 
+        if (beginning >= this.book.length) {
+          return null;
+        }
+        this.page++
+
+        const turnPage = this.book.slice(beginning, endding);
+
+        return turnPage
+      }
     }
+
+
+
+    // console.log(result)
 
     // 👉 CHALLENGE 4 AntFarm
     class AntFarm {
@@ -130,8 +224,34 @@
       //      console.log(list) // prints ["a"]
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
+      constructor(...ants) {
+        this.ants = ants.map(ant => ({ name: ant, health: 100 }))
+      }
 
+      work() {
+        const numOfAnts = this.ants.length
+        if (numOfAnts === 0) {
+          return "No ants here. Did you work them to death?"
+        }
+        this.ants = this.ants.map(ant => {
+          ant.health -= 20
+          return ant
+        }).filter(ant => ant.health > 0)
+
+        return `${numOfAnts} ants starting work!`
+      }
+
+
+      feed(givenName) {
+        const toFeed = this.ants.filter(ant => ant.name === givenName)
+        if (toFeed.length === 0) {
+          return `${givenName} not found!`
+        }
+        toFeed.forEach(ant => ant.health += 15)
+        return "Yum!"
+      }
     }
+
 
     // 🧪 TESTS, do not make any changes below this line ===================
     // 🧪 TESTS, do not make any changes below this line ===================
